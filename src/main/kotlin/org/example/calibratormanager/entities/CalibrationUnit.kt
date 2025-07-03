@@ -20,6 +20,6 @@ class CalibrationUnit {
     lateinit var type: String // lateinit aka inizializzato più avanti (runtime)
 
     @ManyToOne(cascade = [(CascadeType.ALL)])
-    lateinit var calibrator : Calibrator
+    var calibrator : Calibrator? = null
 
 }

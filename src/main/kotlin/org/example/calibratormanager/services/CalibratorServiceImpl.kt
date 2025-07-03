@@ -5,11 +5,13 @@ import jakarta.persistence.EntityNotFoundException
 import org.example.calibratormanager.DTOs.CalibratorDTO
 import org.example.calibratormanager.DTOs.toDTO
 import org.example.calibratormanager.entities.Calibrator
+import org.example.calibratormanager.repositories.CalibrationUnitRepository
 import org.example.calibratormanager.repositories.CalibratorRepository
 import org.springframework.stereotype.Service
+import kotlin.jvm.optionals.getOrElse
 import kotlin.jvm.optionals.getOrNull
 @Service
-class CalibratorServiceImpl(private val cr: CalibratorRepository): CalibratorService {
+class CalibratorServiceImpl(private val cr: CalibratorRepository, private val cur: CalibrationUnitRepository): CalibratorService {
     override fun getCalibrator(id: Long): CalibratorDTO? {
         return cr.findById(id).getOrNull()?.toDTO() // toDTO è applicato solo nel caso non sia ritornato null (?)
     }
@@ -20,18 +22,27 @@ class CalibratorServiceImpl(private val cr: CalibratorRepository): CalibratorSer
 
     override fun createCalibrator(c: CalibratorDTO): CalibratorDTO {
         if(cr.findById(c.networkId).isPresent ) throw EntityExistsException()
+        val cus =  cur.findAllById( c.calibrationUnitsId)
+
+
         val calib= Calibrator().apply{
             networkId = c.networkId
             networkIdMu=c.networkIdMu
-            type=c.type
             name=c.name
-            measuresUnit=c.measuresUnit
-            tempPoint=c.tempPoint
+            CalibrationUnits = mutableSetOf()
         }
 
-        cr.save(calib)
 
-        return calib.toDTO()
+        if(c.calibrationUnitsId.isNotEmpty()){
+
+            if(cus.any { it.calibrator != null && it.calibrator!!.networkId != calib.networkId })
+                throw Exception("A CalibratorUnit is already assigned ${cus.filter { it.calibrator != null && it.calibrator!!.networkId != calib.networkId  }}")
+            cus.forEach { it.calibrator = calib }
+            cur.saveAll(cus)
+            calib.CalibrationUnits = cus.toMutableSet()
+        }
+
+        return cr.save(calib).toDTO()
     }
 
     override fun deleteCalibrator(id: Long) {
@@ -39,20 +50,28 @@ class CalibratorServiceImpl(private val cr: CalibratorRepository): CalibratorSer
     }
 
     override fun updateCalibrator(c: CalibratorDTO): CalibratorDTO {
-        if(cr.findById(c.networkId).isEmpty ) throw EntityNotFoundException()
-        val calib = cr.findById(c.networkId).get()
-        calib.apply{
+
+        val cus =  cur.findAllById( c.calibrationUnitsId)
+        val oldCalibrator = cr.findById(c.networkId).get()
+
+        val calib= oldCalibrator.apply{
             networkId = c.networkId
             networkIdMu=c.networkIdMu
-            type=c.type
             name=c.name
-            measuresUnit=c.measuresUnit
-            tempPoint=c.tempPoint
+
         }
 
-        cr.save(calib)
 
-        return calib.toDTO()
+        if(c.calibrationUnitsId.isNotEmpty()){
+
+            if(cus.any { it.calibrator != null && it.calibrator!!.networkId != calib.networkId })
+                throw Exception("A CalibratorUnit is already assigned ${cus.filter { it.calibrator != null && it.calibrator!!.networkId != calib.networkId  }}")
+            cus.forEach { it.calibrator = calib }
+            cur.saveAll(cus)
+            calib.CalibrationUnits = cus.toMutableSet()
+        }
+
+        return cr.save(calib).toDTO()
     }
 
     override fun startCalibration(id: Long, type: String) {

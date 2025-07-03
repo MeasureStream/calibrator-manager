@@ -1,15 +1,14 @@
 package org.example.calibratormanager.DTOs
 
+import org.example.calibratormanager.entities.CalibrationUnit
 import org.example.calibratormanager.entities.Calibrator
 
 data class CalibratorDTO(
     val networkId: Long,
     val networkIdMu: Long,
-    val measuresUnit: String,
-    val type: String,
     val name: String,
-    val tempPoint: Double,
+    val calibrationUnitsId: List<Long>,
 )
 
 
-fun Calibrator.toDTO() = CalibratorDTO(networkId, networkIdMu, measuresUnit, type, name, tempPoint)
+fun Calibrator.toDTO() = CalibratorDTO(networkId, networkIdMu, name, CalibrationUnits.map { networkId })
