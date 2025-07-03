@@ -11,4 +11,4 @@ data class CalibratorDTO(
 )
 
 
-fun Calibrator.toDTO() = CalibratorDTO(networkId, networkIdMu, name, CalibrationUnits.map { networkId })
+fun Calibrator.toDTO() = CalibratorDTO(networkId, networkIdMu, name, CalibrationUnits.map { it -> it.networkId }.toList())
