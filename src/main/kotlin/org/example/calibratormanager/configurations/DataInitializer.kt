@@ -34,7 +34,7 @@ class DataInitializer(
                 testPoint = i * 1.5
                 measuresUnit = "unit-$i"
                 type =  listOf("Temperature", "Pressure", "Humidity").random()
-                calibrator.also { this.calibrator = it } // set bidirezionale
+                this.calibrator = calibrator
             }
         }
 
