@@ -77,13 +77,11 @@ class CalibrationUnitServiceImpl(private val cur: CalibrationUnitRepository, pri
                     return  cur.save(calibrationUnit).toDTO()
                 }
             }
-            else -> {
-                return cur.save(calibrationUnit).toDTO()
-            }
+
         }
 
 
-
+        return cur.save(calibrationUnit).toDTO()
 
     }
 
