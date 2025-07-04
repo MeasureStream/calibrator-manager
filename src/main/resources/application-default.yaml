@@ -1,0 +1,20 @@
+
+spring:
+  application:
+    name: calibrator-manager
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:11.1:///integration-tests-db
+
+
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.christiandellisanti.uk/realms/measurestream

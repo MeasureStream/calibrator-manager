@@ -1,0 +1,28 @@
+spring:
+  application:
+    name: calibrator-manager
+
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://auth.christiandellisanti.uk/realms/measurestream
+          #issuer-uri: http://keycloak.local:8090/realms/measurestream
+
+
+
+mqtt:
+  broker: tcp://mosquitto:1883
+  username: ${MQTT_USERNAME}
+  password: ${MQTT_PASSWORD}
+  client-id: spring-backend
+
+server:
+  port: 8080
