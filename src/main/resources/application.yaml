@@ -7,6 +7,10 @@ spring:
     hibernate:
       ddl-auto: create-drop
 
+  datasource:
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+    url: jdbc:tc:postgresql:11.1:///integration-tests-db
+
 
 
   security:
