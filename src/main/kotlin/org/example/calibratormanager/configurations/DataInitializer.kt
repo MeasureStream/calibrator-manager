@@ -6,7 +6,9 @@ import org.example.calibratormanager.entities.Calibrator
 import org.example.calibratormanager.repositories.CalibrationUnitRepository
 import org.example.calibratormanager.repositories.CalibratorRepository
 import org.springframework.beans.factory.InitializingBean
+import org.springframework.data.geo.Point
 import org.springframework.stereotype.Component
+import kotlin.random.Random
 
 @Component
 class DataInitializer(
@@ -25,6 +27,7 @@ class DataInitializer(
             networkIdMu = 1001L
             name = "Calibrator A"
             CalibrationUnits = mutableSetOf() // inizializza l'insieme
+            location = Point(Random.nextDouble(45.06,45.08), Random.nextDouble(7.5,7.6))
         }
 
         // Crea 4 CalibrationUnit e collegale al Calibrator
