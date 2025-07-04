@@ -6,6 +6,7 @@ import jakarta.persistence.Id
 import jakarta.persistence.OneToMany
 import jakarta.validation.constraints.NotBlank
 import org.example.calibratormanager.DTOs.CalibrationUnitDTO
+import org.springframework.data.geo.Point
 
 
 @Entity
@@ -19,6 +20,8 @@ class Calibrator {
 
     @OneToMany(cascade = [(CascadeType.ALL)], mappedBy = "calibrator" , orphanRemoval = true)
     lateinit var CalibrationUnits : MutableSet<CalibrationUnit>
+
+    lateinit var location : Point
 
 
 

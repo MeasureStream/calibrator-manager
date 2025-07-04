@@ -30,6 +30,7 @@ class CalibratorServiceImpl(private val cr: CalibratorRepository, private val cu
             networkIdMu=c.networkIdMu
             name=c.name
             CalibrationUnits = mutableSetOf()
+            location = c.location
         }
 
 
@@ -58,7 +59,7 @@ class CalibratorServiceImpl(private val cr: CalibratorRepository, private val cu
             networkId = c.networkId
             networkIdMu=c.networkIdMu
             name=c.name
-
+            location = c.location
         }
 
 
